@@ -1,59 +1,59 @@
-const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const {
+    Sequelize,
+    DataTypes,
+    Model,
+    Op
+} = require('sequelize');
+// const { defaultValueSchemable } = require('sequelize/types/lib/utils');
+const {
+    definisionModel
+} = require('../models/User');
+const dbURI = "postgres://dzerinoleg1:3504@localhost:5432/nodelogin"
 
-//hanfle erros
+
+
 const handleErrors = (err) => {
-   
-    console.log(err.message);
-    // console.log(err._message);
-    console.log(err.code);
+    // console.log( 'EOG' + err.original.code);
     // dublicate error code
     let errors = {
         email: '',
         password: ''
     };
+    if (err.original) {
 
-    // incorrect email
-    if (err.message === 'incorrect email') {
-        errors.email = 'that email is not registered';
+      //  errors.email = 'this email is already registered';
+        console.log("code:::::" + 23505);
+        errors.email = err.original.detail;
+        
     }
-      // incorrect password
-      if (err.message === 'incorrect password') {
-        errors.password = 'that password is  incorrent';
-    }
-       
-    
-    if (err.code === 11000) {
-       errors.email = 'this email is already registered';
-        return error;
-    }
-    // validation errors
-    if (err.message.includes('users validation failed')||
-    err.message.includes(' Minimum pasword length is 6 characters') ) {
-        //    console.log(Object.values(err.errors.email.properties.message));
-        Object.values(err.errors).forEach(({
-            properties
-        }) => {
-            error[properties.path] = properties.message;
-        })
-        // err.errors.email ? 
-        // error.email = err.errors.email.properties.message:error.email = '';
+    const a = [1,2,3,4]
+    console.log( 'type'+typeof(a));
+    if (!err.original) {
+        console.log('array');
+        if (err.errors.some((el => {
+                return (el.message.includes("Validation isEmail on email failed") || el.message.includes("Validation len on password failed"))
+            }))) {
+            Object.values(err.errors).forEach((
+                properties
+            ) => {
+                errors[properties.path] = properties.message;
+                console.log('propeties:::' + properties.path);
+                console.log(errors.email);
+            })
+         }
+     }
 
-        // err.errors.password ? 
-        // error.password = err.errors.password.properties.message:error.password = '';
-        // console.log(error.email);
-        // console.log(error.password);
-
-
-    }
-
+console.log(errors.email);
     return errors;
 }
-const maxAge = 3*24*60*68
-const createToken = (id) =>{
-return jwt.sign({id}, 'net ninja secret',{
-    expiresIn: maxAge
-})
+const maxAge = 3 * 24 * 60 * 68
+const createToken = (id) => {
+    return jwt.sign({
+        id
+    }, 'nodelogin secret', {
+        expiresIn: maxAge
+    })
 }
 
 module.exports.signup_get = (req, res) => {
@@ -66,51 +66,102 @@ module.exports.login_get = (req, res) => {
 
 module.exports.signup_post = async (req, res) => {
     const {
+        name,
         email,
         password
     } = req.body;
-    console.log(req.body);
+    console.log("req.body" + req.body.name);
     try {
-        const user = await User.create({
-            email,
-            password
+        await definisionModel().sync();
+        const user = await definisionModel().create({
+            name: name,
+            email: email,
+            password: password
         })
-        const token = createToken(user._id)
-        res.cookie('jwt', token, {httpOnly:true, maxAge: maxAge*1000})
-        res.status(201).json({user: user._id});   
+        console.log('id::' + user.id);
+        const token = createToken(user.id)
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            maxAge: maxAge * 1000
+        })
+        res.status(201).json(
+            user);
     } catch (err) {
         const errors = handleErrors(err);
-        console.log(errors);
-        //  handleErrors(err);
+        // console.log('not conect to db::' + err);
+        // console.log("code" + err.original.code);
+        // console.log("detail" + err.original.detail);
+        // console.log('errors' + errors.email);
+        res.status(400).json(errors)
+        // console.log(err);
+        // console.log(err.errors[0]);
+        // res.status(400).json(err)
+    }
 
-        //   res.status(400).send('error,user not created')
-        res.status(400).json({errors})
-    }
-   
-    
-    }
+
+}
 
 
 module.exports.login_post = async (req, res) => {
     const {
+        name,
         email,
         password
     } = req.body;
-    console.log(email)
+    console.log("req.body" + req.body.name);
     try {
-        const user = await User.login(email,password);
-        const token = createToken(user._id)
-        res.cookie('jwt', token, {httpOnly:true, maxAge: maxAge*1000})
-        res.status(200).json({user: user._id})
+        const User = definisionModel();
+
+
+
+        const usersEmail = await User.findAll({
+            attributes: ['id', 'email']
+        });
+        const result = {};
+        console.log(usersEmail);
+        console.log('email::' + email);
+        const isEmail = usersEmail.some((item) => {
+            result.id = item.dataValues.id;
+            result.email = item.dataValues.email;
+            return item.dataValues.email === email;
+        });
+
+        console.log(isEmail);
+        if (isEmail) {
+            const token = createToken(result.id);
+            res.cookie('jwt', token, {
+                httpOnly: true,
+                maxAge: maxAge * 1000
+            })
+            res.status(200).json({
+                name,
+                email,
+                token
+            })
+        } else {
+            throw ("it is erroer")
+        }
+
     } catch (err) {
-        const errors = handleErrors(err);
-        res.status(400).json({errors});
+         const errors = handleErrors(err);
+        console.log('not conect to db::' + err);
+        res.status(400).json(errors)
     }
 
 }
 
 module.exports.logout_get = (req, res) => {
-    res.cookie('jwt', '', { maxAge: 1});
+    res.cookie('jwt', '', {
+        maxAge: 1
+    });
     res.redirect('/')
-    
+}
+
+module.exports.db_get = (req, res) => {
+
+    (async () => {
+        //  definisionModel();
+        await definisionModel().sync()
+    })();
+    res.redirect('/')
 }

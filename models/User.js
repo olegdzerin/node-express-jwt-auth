@@ -1,50 +1,48 @@
-const mongoose = require('mongoose');
-const {
-  isEmail
-} = require('validator');
+//const mongoose = require('mongoose');
+// const { isEmail} = require('validator');
+
+const { Sequelize, DataTypes, Op, Model} = require('sequelize');
 const bcrypt = require('bcrypt');
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: [true, 'Please enter a valid email'],
-    unique: true,
-    lowercase: true,
-    validate: [isEmail, "Please enter a valid email"]
-  },
-  password: {
-    type: String,
-    required: [true, 'Please enter a password'],
-    minlength: [6, 'Minimum pasword length is 6 characters'],
-
-  },
-});
-// fire function affter doc seves to db
-userSchema.post('save', function (doc, next) {
-  console.log('new user was create and saved', doc);
-  next();
-});
-userSchema.pre('save', async function (next) {
-  const salt = await bcrypt.genSalt();
-  this.password = await bcrypt.hash(this.password, salt)
-  next();
-})
-
-// static method to login user
-userSchema.statics.login = async function (email, password) {
-  const user = await this.findOne({
-    email
-  });
-  if (user) {
-    const auth = await bcrypt.compare(password, user.password);
-   
-    if (auth) {
-      return user;
-    }
-      throw Error('incorrect password');
-    }
+const dbURI = "postgres://dzerinoleg1:3504@localhost:5432/nodelogin"
   
-    throw Error('incorrect email');
+const definisionModel = () => {
+  const sequelize = new Sequelize(dbURI);
+  // (async () => {
+  //   sequelize.sync({force: true});
+  // })
+  const User = sequelize.define('user', {
+      id: {
+        type: DataTypes.INTEGER,
+        
+        primaryKey: true,
+        autoIncrement: true,
+        unique:true
+      },
+      
+      name: {
+        type: DataTypes.TEXT,
+       // allowNull: false,
+       // unique:true
+      },
+      email: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {isEmail: true},
+        unique: true
+      },
+      password: {
+        type: DataTypes.STRING(64),
+        validate: {len: [6,100]}
+      },
+  }, );
+  // (async () => {
+  //   await User.sync({alter:true})
+  // });
 
+  return User;
 }
-const User = mongoose.model('users', userSchema);
-module.exports = User;
+module.exports = {definisionModel};
+
+
+
+

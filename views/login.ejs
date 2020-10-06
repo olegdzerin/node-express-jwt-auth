@@ -1,10 +1,13 @@
 <%- include('partials/header'); -%>
 <form action="">
     <h2>Log in</h2>
+    <label for="name">Name</label>
+    <input type="text" name="name" required />
+    <div class="name error"></div>
     <label for="email">Email</label>
     <input type="text" name="email" required />
     <div class="email error"></div>
-      <label for="password">Email</label>
+      <label for="password">Password</label>
     <input type="text" name="password" required />
     <div class="password error"></div>
     <button>log in</button>
@@ -22,6 +25,8 @@ emailError.textContent = '';
 passwordError.textContent = '';
 
 // get tha values
+const name = form.name.value;
+
 const email = form.email.value;
 const password = form.password.value;
 //   console.log(email);
@@ -29,6 +34,7 @@ try {
     const res = await fetch('/login', {
         method: 'POST',
         body: JSON.stringify({
+            name,
             email,
             password
         }),
@@ -42,10 +48,14 @@ try {
         emailError.textContent = data.errors.email;
         passwordError.textContent = data.errors.password;
     }
-    if (data.user) {
-        location.assign('/');
-       console.log(data.user.id)
+    if (data.name) {
+       // location.assign('/');
+       console.log(data.token);
+     
+          location.assign('/');
+       
     }
+
 
 } catch (err) {
 

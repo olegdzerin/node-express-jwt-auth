@@ -1,0 +1,5 @@
+not conect to db::SequelizeUniqueConstraintError: повторювані значення ключа порушують обмеження унікальності "users_email_key"
+not conect to db::SequelizeValidationError: Validation error: Validation isEmail on email failed
+
+
+not conect to db::SequelizeValidationError: Validation error: Validation len on password failed

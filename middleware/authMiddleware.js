@@ -1,7 +1,7 @@
 const { request } = require("express");
 
 const jwt = require('jsonwebtoken');
-const User = require("../models/User");
+ const {definisionModel} = require("../models/User");
 
 const requireAuth = (req, res, next) => {
 const token = req.cookies.jwt;
@@ -35,9 +35,20 @@ const checkUser  =  (req, res, next) => {
                console.log(`err.message:${err.message}`);
                 next();
             }else{
-                console.log(decodedToken);
-                let user = await User.findById(decodedToken.id);
-                res.locals.user = user
+                console.log(`decodedToken::${decodedToken}`);
+               const User =  definisionModel();
+               const user = await User.findAll({
+                   where: {id: decodedToken.id},
+                   raw: true
+                }
+           
+                );
+               // user.map(el =>  el.get({ plain: true }));
+                //  }).map(el => el.get({ plain: true }));
+                
+              //   console.log(`user::${user[0].email}`);
+                // let user = await User.findById(decodedToken.id);
+                res.locals.user = user[0];
                 next();
             }
           })

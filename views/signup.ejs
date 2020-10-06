@@ -1,6 +1,9 @@
 <%- include('partials/header'); -%>
 <form action="">
     <h2>Sign up</h2>
+    <label for="name">Name</label>
+    <input type="text" name="name" required />
+    <div class="name error"></div>
     <label for="email">Email</label>
     <input type="text" name="email" required />
     <div class="email error"></div>
@@ -11,6 +14,8 @@
 </form>
 <script>
     const form = document.querySelector('form');
+    const Error = document.querySelector('.name.error');
+    const nameError = document.querySelector('.name.error');
     const emailError = document.querySelector('.email.error');
     const passwordError = document.querySelector('.password.error');
 
@@ -19,17 +24,21 @@
         e.preventDefault();
 
         // reset errors 
+        nameError.textContent = '';
         emailError.textContent = '';
         passwordError.textContent = '';
 
         // get tha values
+        const name = form.name.value;
         const email = form.email.value;
         const password = form.password.value;
-        //   console.log(email);
+          
         try {
+            
             const res = await fetch('/signup', {
                 method: 'POST',
                 body: JSON.stringify({
+                    name,
                     email,
                     password
                 }),
@@ -37,19 +46,26 @@
                     'Content-Type': 'application/json'
                 }
             })
-            const data = await res.json();
-            console.log(data)
-            if (data.errors) {
-                emailError.textContent = data.errors.email;
-                passwordError.textContent = data.errors.password;
+
+            const result = await res.json();
+        //     console.log(result.errors[0].message);
+        //    console.log("data:::" + result);
+        //    console.log(res.status);
+        //   location.assign('/');
+            if (res.status === 400) {
+                emailError.textContent = result.email;
+                passwordError.textContent = result.password;
+             console.log(result);
+            console.log("res::;" + result);
             }
-            if (data.user) {
-                location.assign('/');
+            if (res.status === 201) {
+                location.assign('/login');
             }
 
         } catch (err) {
 
-            console.log(err)
+            console.log('err::' + err)
+          
         }
     })
 </script>
