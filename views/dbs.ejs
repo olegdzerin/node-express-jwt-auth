@@ -1,0 +1,75 @@
+<%- include('partials/header'); -%>
+
+<form action="">
+    <h2>Log in</h2>
+    <label for="category">Category</label>
+    <input type="text" name="category" required />
+    <div class="name error"></div>
+    <label for="gender">Gender</label>
+    <input type="text" name="gender" required />
+    <div class="email error"></div>
+      <label for="price">Price</label>
+    <input type="text" name="price" required />
+    <div class="password error"></div>
+    <label for="photoUrl">PhotoUrl</label>
+    <input type="text" name="photoUrl" required />
+    <label for="description">Description</label>
+    <input type="text" name="description" required />
+    <button>log in</button>
+</form>
+<script>
+    const form = document.querySelector('form');
+    const emailError = document.querySelector('.email.error');
+    const passwordError = document.querySelector('.password.error');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+// reset errors 
+emailError.textContent = '';
+passwordError.textContent = '';
+
+// get tha values
+const category = form.category.value;
+
+const gender = form.gender.value;
+const price = form.price.value;
+const photoUrl = form.photoUrl.value;
+const description = form.description.value;
+//   console.log(email);
+try {
+    const res = await fetch('/dbs', {
+        method: 'POST',
+        body: JSON.stringify({
+            category,
+            gender,
+            price,
+            photoUrl,
+            description
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    const data = await res.json();
+    console.log(data)
+    if (data.errors) {
+        // emailError.textContent = data.errors.email;
+        // passwordError.textContent = data.errors.password;
+    }
+    if (data.category) {
+       // location.assign('/');
+       console.log(data.token);
+     
+          location.assign('/dbs');
+       
+    }
+
+
+} catch (err) {
+
+    console.log(err)
+}
+    })
+</script>
+<%- include('partials/footer'); -%>
