@@ -1,13 +1,13 @@
-const { Sequelize, DataTypes, Op, Model} = require('sequelize');
+const { Sequelize, DataTypes, Op, Model, STRING} = require('sequelize');
 const bcrypt = require('bcrypt');
 const dbURI = "postgres://dzerinoleg1:3504@localhost:5432/nodelogin"
   
-const userModel = () => {
+const productsModel = () => {
   const sequelize = new Sequelize(dbURI);
   // (async () => {
   //   sequelize.sync({force: true});
   // })
-  const User = sequelize.define('user', {
+  const Product = sequelize.define('product', {
       id: {
         type: DataTypes.INTEGER,
         
@@ -16,29 +16,37 @@ const userModel = () => {
         unique:true
       },
       
-      name: {
+      category: {
         type: DataTypes.TEXT,
-       // allowNull: false,
-       // unique:true
+       allowNull: false
+      
       },
-      email: {
+      gender: {
         type: DataTypes.TEXT,
+        allowNull: false
+        
+      },
+      price: {
+        type: DataTypes.FLOAT,
         allowNull: false,
-        validate: {isEmail: true},
-        unique: true
+     
       },
-      password: {
-        type: DataTypes.STRING(64),
-        validate: {len: [6,100]}
+      photo: {
+       type: DataTypes.STRING
+       
       },
+      description: {
+        type: DataTypes.STRING, 
+      }
+    
   }, );
   // (async () => {
   //   await User.sync({alter:true})
   // });
 
-  return User;
+  return Product;
 }
-module.exports = {userModel};
+module.exports = {productsModel};
 
 
 
