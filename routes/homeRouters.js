@@ -1,13 +1,16 @@
 const  {Router} = require('express');
-const homeController = require('../controllers/homeController');
+// const homeController = require('../controllers/homeController');
 const router = Router();
 
 
+const gender = ['', 'Переглянути для чоловіків', 'Переглянути для жінок'];
+router.get('/', (req, res) =>  res.render('home'));
+router.get('/women-home',  (req, res) => {   
+    res.render('women-home', {gender:{women: gender[2]}, men: gender[0]});});
 
-router.get('/home', homeController.home_get);
-router.get('/women-home', homeController.women_home_get);
-
-router.get('/men-home', homeController.men_home_get);
+router.get('/men-home', (req, res) => { 
+    res.render('women-home',{gender:{men: gender[1]},women: gender[0]});
+});
 
 module.exports = router;
 

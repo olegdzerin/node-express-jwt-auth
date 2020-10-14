@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes, Op, Model} = require('sequelize');
-const bcrypt = require('bcrypt');
-const dbURI = "postgres://dzerinoleg1:3504@localhost:5432/nodelogin"
+  // const bcrypt = require('bcrypt');
+  const dbURI = require('../env');
   
 const cartProductModel = () => {
   const sequelize = new Sequelize(dbURI);
@@ -22,10 +22,6 @@ const cartProductModel = () => {
      
   }, 
   );
-  // (async () => {
-  //   await User.sync({alter:true})
-  // });
-
   return CartProduct;
 }
 module.exports = {cartProductModel};

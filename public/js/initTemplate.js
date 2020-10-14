@@ -15,7 +15,7 @@ export class Init {
         <div class="text-muted">${item.price}</div>\
         <div class="col-lg-12 col-md-12 text-center ">\
         <div class="text-muted invisible" id="getId" >${item.id}</div>\
-        <button class="btn btn-default delate"  data-toggle="tooltip" data-placement="left" title="Вибрати">Вибрати</button>\
+        <button class="btn btn-default select"  data-toggle="tooltip" data-placement="left"  title="Вибрати">Вибрати</button>\
         </div>\
         </div>\
         </div>`;

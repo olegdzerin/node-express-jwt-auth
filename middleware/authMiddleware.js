@@ -1,5 +1,3 @@
-const { request } = require("express");
-
 const jwt = require('jsonwebtoken');
  const {userModel} = require("../models/User");
 
@@ -19,7 +17,7 @@ if (token) {
   })
 }
 else{
-    res.redirect('/login')
+    res.redirect('/home')
 }
 }
 
@@ -41,13 +39,7 @@ const checkUser  =  (req, res, next) => {
                    where: {id: decodedToken.id},
                    raw: true
                 }
-           
-                );
-               // user.map(el =>  el.get({ plain: true }));
-                //  }).map(el => el.get({ plain: true }));
-                
-              //   console.log(`user::${user[0].email}`);
-                // let user = await User.findById(decodedToken.id);
+             );
                 res.locals.user = user[0];
                 next();
             }
@@ -57,7 +49,6 @@ const checkUser  =  (req, res, next) => {
         res.locals.user = null;
         next();
     }
-   
 };
 module.exports = { requireAuth, checkUser};
 

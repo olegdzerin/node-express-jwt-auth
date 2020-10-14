@@ -1,12 +1,11 @@
 const { Sequelize, DataTypes, Op, Model} = require('sequelize');
-const bcrypt = require('bcrypt');
-const dbURI = "postgres://dzerinoleg1:3504@localhost:5432/nodelogin"
+// const bcrypt = require('bcrypt');
+//const dbURI = "postgres://dzerinoleg1:3504@localhost:5432/nodelogin"
+const dbURI = require('../env');
   
 const userModel = () => {
   const sequelize = new Sequelize(dbURI);
-  // (async () => {
-  //   sequelize.sync({force: true});
-  // })
+ 
   const User = sequelize.define('user', {
       id: {
         type: DataTypes.INTEGER,
@@ -18,8 +17,6 @@ const userModel = () => {
       
       name: {
         type: DataTypes.TEXT,
-       // allowNull: false,
-       // unique:true
       },
       email: {
         type: DataTypes.TEXT,
@@ -32,9 +29,6 @@ const userModel = () => {
         validate: {len: [6,100]}
       },
   }, );
-  // (async () => {
-  //   await User.sync({alter:true})
-  // });
 
   return User;
 }

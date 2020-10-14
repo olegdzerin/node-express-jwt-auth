@@ -75,16 +75,20 @@ var selectProduct = (e) => {
 };
 
 var addToCart = async () => {
-  const user_id = localStorage.getItem('user_id');
-  const product_id = localStorage.getItem('product_id')
+   const user_id = Number(localStorage.getItem('user_id'));
+  // const product_id = Number(localStorage.getItem('product_id'))
+ // const user_id = localStorage.getItem('user_id');
+   const product_id = Number(localStorage.getItem('product_id'))
    console.log(user_id, product_id);
+   console.log(typeof(user_id), typeof(product_id));
+
   try {
-    const res = await fetch(`/cart/:${user_id}`);
+    const res = await fetch(`/cart/${user_id}`);
     const cart = await res.json()
     localStorage.setItem('cart_id', cart.id);
-       console.log(cart);
+       console.log('cart::' + cart.id);
     try {
-      const res = await fetch('/dbCartProduct', {
+      const res = await fetch('/cart-products', {
         method: "POST",
         body: JSON.stringify({
           cart_id: cart.id,
@@ -95,6 +99,7 @@ var addToCart = async () => {
         }
       })
       const result = await res.json();
+      console.log(result);
     } catch (err) {
       console.log(err);
     }

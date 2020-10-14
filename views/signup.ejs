@@ -23,18 +23,13 @@
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // reset errors 
         nameError.textContent = '';
         emailError.textContent = '';
         passwordError.textContent = '';
-
-        // get tha values
         const name = form.name.value;
         const email = form.email.value;
         const password = form.password.value;
-          
         try {
-            
             const res = await fetch('/signup', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -46,26 +41,32 @@
                     'Content-Type': 'application/json'
                 }
             })
-
             const result = await res.json();
-        //     console.log(result.errors[0].message);
-        //    console.log("data:::" + result);
-        //    console.log(res.status);
-        //   location.assign('/');
             if (res.status === 400) {
                 emailError.textContent = result.email;
                 passwordError.textContent = result.password;
-             console.log(result);
-            console.log("res::;" + result);
+                console.log(result);
+                console.log("res::;" + result);
             }
             if (res.status === 201) {
-                location.assign('/login');
+                const customer = result;
+                try {
+                    const res = await fetch(`/cart/${customer.id}`);
+
+                    const cart = await res.json();
+                    console.log(cart);
+                    localStorage.setItem('cart_id', cart.id);
+                    localStorage.setItem('user_id', customer.id);
+                    location.assign('/');
+                    console.log(localStorage.getItem('cart_id'));
+                    console.log(localStorage.getItem('user_id'));
+                } catch (err) {
+                    console.log(err);
+                }
+
             }
-
         } catch (err) {
-
             console.log('err::' + err)
-          
         }
     })
 </script>

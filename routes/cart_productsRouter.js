@@ -1,20 +1,16 @@
-// const  {Router} = require('express');
-// const cartController = require('../controllers/authController');
-// const router = Router();
+const  {Router} = require('express');
+const cart_productsController = require('../controllers/cart_productsController');
+const router = Router();
+
+
+router.get('/', (req, res) => {
+  res.render('cart-products' , {title: "В кошику слідуючі товари", gender: {}})
+});
+
+ router.post('/', cart_productsController.cart_products_post);
+
+ router.get('/:cart_id', cart_productsController.cart_products_get);
 
 
 
-// router.get('/signup', authController.signup_get);
-//  router.get('/login', authController.login_get);
-// // router.get('/login', function(req, res,next){
-// //     res.render('login')
-// //});
-// router.post('/signup', authController.signup_post);
-// router.post('/', cartController.addToCart);
-// router.get('/logout', authController.logout_get);
-
-// router.get('/db', authController.db_get);
-
-
-
- // module.exports = router;
+ module.exports = router;

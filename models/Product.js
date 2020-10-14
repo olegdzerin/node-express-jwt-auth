@@ -1,12 +1,9 @@
 const { Sequelize, DataTypes, Op, Model, STRING} = require('sequelize');
-const bcrypt = require('bcrypt');
-const dbURI = "postgres://dzerinoleg1:3504@localhost:5432/nodelogin"
+// const bcrypt = require('bcrypt');
+const dbURI = require('../env');
   
 const productsModel = () => {
   const sequelize = new Sequelize(dbURI);
-  // (async () => {
-  //   sequelize.sync({force: true});
-  // })
   const Product = sequelize.define('product', {
       id: {
         type: DataTypes.INTEGER,
@@ -40,10 +37,6 @@ const productsModel = () => {
       }
     
   }, );
-  // (async () => {
-  //   await User.sync({alter:true})
-  // });
-
   return Product;
 }
 module.exports = {productsModel};
