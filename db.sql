@@ -205,9 +205,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.cart_products (id, cart_id, product_id, "createdAt", "updatedAt") FROM stdin;
-1	1	8	2020-10-14 10:53:16.011+03	2020-10-14 10:53:16.011+03
-2	5	6	2020-10-14 11:23:21.666+03	2020-10-14 11:23:21.666+03
-3	5	4	2020-10-14 12:09:08.375+03	2020-10-14 12:09:08.375+03
+4	7	8	2020-10-14 16:00:30.838+03	2020-10-14 16:00:30.838+03
 \.
 
 
@@ -216,11 +214,8 @@ COPY public.cart_products (id, cart_id, product_id, "createdAt", "updatedAt") FR
 --
 
 COPY public.carts (id, customer_id, "createdAt", "updatedAt") FROM stdin;
-1	1	2020-10-14 10:50:33.528+03	2020-10-14 10:50:33.528+03
-2	2	2020-10-14 10:59:08.291+03	2020-10-14 10:59:08.291+03
-3	3	2020-10-14 10:59:54.825+03	2020-10-14 10:59:54.825+03
-4	5	2020-10-14 11:21:07.558+03	2020-10-14 11:21:07.558+03
-5	7	2020-10-14 11:23:05.1+03	2020-10-14 11:23:05.1+03
+6	8	2020-10-14 15:57:00.891+03	2020-10-14 15:57:00.891+03
+7	9	2020-10-14 16:00:18.839+03	2020-10-14 16:00:18.839+03
 \.
 
 
@@ -260,10 +255,7 @@ COPY public.products (id, category, gender, price, "photoUrl", description, "cre
 --
 
 COPY public.users (id, name, email, password, "createdAt", "updatedAt") FROM stdin;
-2	oleg	oleg.dz2171@gmail.com	123456	2020-10-14 10:59:08.059+03	2020-10-14 10:59:08.059+03
-3	oleg	oleg1.dz2171@gmail.com	123456	2020-10-14 10:59:54.566+03	2020-10-14 10:59:54.566+03
-5	oleg	oleg.2dz2171@gmail.com	123456	2020-10-14 11:21:07.328+03	2020-10-14 11:21:07.328+03
-7	oleg	oledsg.dz2171@gmail.com	123456	2020-10-14 11:23:04.862+03	2020-10-14 11:23:04.862+03
+9	oleg	oleg.dz2171@gmail.com	123456	2020-10-14 16:00:18.596+03	2020-10-14 16:00:18.596+03
 \.
 
 
@@ -271,14 +263,14 @@ COPY public.users (id, name, email, password, "createdAt", "updatedAt") FROM std
 -- Name: cart_products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dzerinoleg1
 --
 
-SELECT pg_catalog.setval('public.cart_products_id_seq', 3, true);
+SELECT pg_catalog.setval('public.cart_products_id_seq', 4, true);
 
 
 --
 -- Name: carts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dzerinoleg1
 --
 
-SELECT pg_catalog.setval('public.carts_id_seq', 5, true);
+SELECT pg_catalog.setval('public.carts_id_seq', 7, true);
 
 
 --
@@ -292,7 +284,7 @@ SELECT pg_catalog.setval('public.products_id_seq', 23, true);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dzerinoleg1
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 7, true);
+SELECT pg_catalog.setval('public.users_id_seq', 9, true);
 
 
 --

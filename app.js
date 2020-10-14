@@ -1,7 +1,6 @@
 const express = require('express');
 var authRouters = require('./routes/authRouters');
 var homeRouters = require('./routes/homeRouters');
- var createDbRouters = require('./routes/createDbRouters');
 var productsRouters = require('./routes/productsRouters');
 var cart_productsRouters = require('./routes/cart_productsRouter');
  var cartRouters = require('./routes/cartRouters')
@@ -44,4 +43,4 @@ app.use('/cart', requireAuth, cartRouters)
 
 app.use(authRouters);
 app.use(requireAuth, homeRouters);
- app.use(createDbRouters);
+ 

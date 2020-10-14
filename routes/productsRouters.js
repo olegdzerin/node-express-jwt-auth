@@ -1,20 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
-const jwt = require('jsonwebtoken');
-const {
-  Sequelize,
-  DataTypes,
-  Model,
-  Op
-} = require('sequelize');
-
 const {
   productsModel
 } = require('../models/Product');
-const dbURI = "postgres://dzerinoleg1:3504@localhost:5432/nodelogin"
-
-const productsController = require('../controllers/productsController');
 
 var newData1;
 
@@ -108,8 +96,5 @@ router.get('/:id', function(req, res) {
 res.json(result)
 })()
 });
-
-
-
 
 module.exports = router;
